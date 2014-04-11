@@ -21,6 +21,7 @@
 #include "Game/GameState.hpp"
 #include "Memory/MemoryInterface.hpp"
 #include "Rasterizer/GBuffer.hpp"
+#include "Rasterizer/Lightmaps.hpp"
 #include "Rasterizer/DX9/DX9.hpp"
 #include "TagGroups/TagGroups.hpp"
 
@@ -76,7 +77,7 @@ namespace Yelo
 
 			API_FUNC_NAKED static void Hook_RenderObject_ForceInvertBackfaceNormals()
 			{
-				static uint32 RETN_ADDRESS = GET_FUNC_PTR(RASTERIZER_MODEL_DRAW_INVERT_BACKFACE_NORMALS_CHECK_RETN);
+				static const uintptr_t RETN_ADDRESS = GET_FUNC_PTR(RASTERIZER_MODEL_DRAW_INVERT_BACKFACE_NORMALS_CHECK_RETN);
 
 				_asm{
 					mov     al, 1
@@ -89,8 +90,8 @@ namespace Yelo
 			void		SetTexture(IDirect3DDevice9* pDevice, uint16 sampler, datum_index bitmap_tag_index)
 			{
 				// get the bitmap datum pointer
-				TagGroups::s_bitmap_group*	group = TagGroups::TagGetForModify<TagGroups::s_bitmap_group>(bitmap_tag_index);
-				TagGroups::s_bitmap_data*	bitmap = CAST_PTR(TagGroups::s_bitmap_data*, &group->bitmaps[0]);
+				auto group = TagGroups::TagGetForModify<TagGroups::s_bitmap_group>(bitmap_tag_index);
+				auto bitmap = CAST_PTR(TagGroups::s_bitmap_data*, &group->bitmaps[0]);
 
 				// set the texture to the device
 				blam::rasterizer_set_texture_bitmap_data(sampler, bitmap);
@@ -255,7 +256,7 @@ namespace Yelo
 			{
 				g_extensions_enabled_user_override = true;
 
-				if(parent_element != NULL)
+				if(parent_element != nullptr)
 				{
 					TiXmlElement* extension_element = parent_element->FirstChildElement("ShaderExtension");
 
@@ -266,13 +267,14 @@ namespace Yelo
 						if(enabled)
 							g_extensions_enabled_user_override = Settings::ParseBoolean(enabled);
 						Model::LoadSettings(extension_element);
+						Environment::LoadSettings(extension_element);
 					}
 				}
 			}
 
 			void		SaveSettings(TiXmlElement* parent_element)
 			{
-				if(parent_element != NULL)
+				if(parent_element != nullptr)
 				{
 					TiXmlElement* extension_element = new TiXmlElement("ShaderExtension");
 					parent_element->LinkEndChild(extension_element);
@@ -280,6 +282,7 @@ namespace Yelo
 					extension_element->SetAttribute("enabled", BooleanToString(g_extensions_enabled_user_override));
 
 					Model::SaveSettings(extension_element);
+					Environment::SaveSettings(extension_element);
 				}
 			}
 		};
