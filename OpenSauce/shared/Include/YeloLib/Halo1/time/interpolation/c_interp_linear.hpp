@@ -6,15 +6,14 @@
 */
 #pragma once
 
-#if !PLATFORM_IS_DEDI
-#include "Rasterizer/PostProcessing/Interpolation/c_interp_base.hpp"
+#include <YeloLib/Halo1/time/interpolation/c_interp_base.hpp>
 
 namespace Yelo
 {
-	namespace Rasterizer { namespace PostProcessing
+	namespace Time { namespace Interpolation
 	{
-		template<int C>
-		class c_interp_linear : public c_interp_base<C>
+		template<int ValueCount>
+		class c_interp_linear : public c_interp_base<ValueCount>
 		{
 			struct{
 				real current_value;
@@ -73,14 +72,21 @@ namespace Yelo
 				SetValues(m_members_linear.current_value);
 			}
 
+			void Set(real change_time, real current_value)
+			{
+				m_members_linear.current_value = current_value;
+				m_members_linear.change_time = change_time;
+
+				Update(0.0f);
+			}
+
 		private:
 			void SetValues(real interp)
 			{
 				// in the linear interpolator, all channels have the same value
-				for(int i = 0; i < C; i++)
+				for (int i = 0; i < ValueCount; i++)
 					m_members.values[i] = m_members_linear.current_value;
 			}
 		};
 	};};
 };
-#endif
