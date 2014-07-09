@@ -5,19 +5,19 @@
 	See license\OpenSauce\Halo1_CE for specific license information
 */
 #pragma once
-#include "Rasterizer/PostProcessing/Interfaces/IInterpolator.hpp"
+#include <YeloLib/Halo1/time/interpolation/i_interpolator.hpp>
 
 namespace Yelo
 {
-	namespace Rasterizer { namespace PostProcessing
+	namespace Time { namespace Interpolation
 	{
-		template<int C>
-		class c_interp_base : public IInterpolator
+		template<int ValueCount>
+		class c_interp_base : public i_interpolator
 		{
 		protected:
 			struct
 			{
-				std::array<real, C> values;
+				std::array<real, ValueCount> values;
 			}m_members;
 
 		private:
@@ -38,7 +38,7 @@ namespace Yelo
 				ClearMembers();
 			}
 
-			void Update(real delta_time) {}
+			void Update(real delta_time) = 0;
 		};
 	};};
 };
