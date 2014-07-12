@@ -19,6 +19,7 @@ namespace BlamLib.Test
 			Directory.CreateDirectory(kTestResultsPath);
 			Directory.CreateDirectory(kTestResultsTagsPath);
 		}
+
 		[ClassCleanup]
 		public static void Dispose()
 		{
@@ -27,7 +28,7 @@ namespace BlamLib.Test
 		[TestMethod]
 		public void Halo1TestTagIndex()
 		{
-			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 			{
 				var tagindex = handler.IndexInterface;
 				Blam.DatumIndex datum_scnr_index, datum_matg_index;
@@ -45,7 +46,7 @@ namespace BlamLib.Test
  				}
 				Console.WriteLine("TAG INDEX: Time taken: {0}", StopStopwatch());
 
-				Managers.TagManager tag_manager_scnr = tagindex[datum_scnr_index];
+				var tag_manager_scnr = tagindex[datum_scnr_index];
 				var tag_scenario = tag_manager_scnr.TagDefinition as Blam.Halo1.Tags.scenario_group;
 				tag_scenario = null;
 				tag_manager_scnr = null;
@@ -59,7 +60,7 @@ namespace BlamLib.Test
 		[TestMethod]
 		public void Halo1TestTagIndexRar()
 		{
-			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 			{
 				var tagindex = handler.IndexInterface;
 				Blam.DatumIndex datum_test_index;
@@ -84,7 +85,7 @@ namespace BlamLib.Test
 			var thread_matg = new System.Threading.Thread(delegate (/*object param*/)
 			{
 				StartStopwatch();
-				using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+				using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 				{
 					var tagindex_matg = handler.IndexInterface;
 
@@ -98,7 +99,7 @@ namespace BlamLib.Test
 			var thread_scnr = new System.Threading.Thread(delegate(/*object param*/)
 			{
 				StartStopwatch();
-				using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+				using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 				{
 					var tagindex_scnr = handler.IndexInterface;
 
@@ -118,8 +119,8 @@ namespace BlamLib.Test
 		[TestMethod]
 		public void Halo1TestTagIndexSharing()
 		{
-			using (var handler_matg = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
-			using (var handler_scnr = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+			using (var handler_matg = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
+			using (var handler_scnr = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 			{
 				var tagindex_matg = handler_matg.IndexInterface;
 				var tagindex_scnr = handler_scnr.IndexInterface;
@@ -163,7 +164,7 @@ namespace BlamLib.Test
 			var thread_matg = new System.Threading.Thread(delegate (/*object param*/)
 			{
 				StartSubStopwatch();
-				handler_matg = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath);
+				handler_matg = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir);
 				{
 					var tagindex_matg = handler_matg.IndexInterface;
 
@@ -182,7 +183,7 @@ namespace BlamLib.Test
 			var thread_scnr = new System.Threading.Thread(delegate(/*object param*/)
 			{
 				StartSubStopwatch();
-				handler_scnr = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath);
+				handler_scnr = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir);
 				{
 					var tagindex_scnr = handler_scnr.IndexInterface;
 
@@ -218,7 +219,7 @@ namespace BlamLib.Test
 		[TestMethod]
 		public void Halo1TestTagIndexNonTags()
 		{
-			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 			{
 				var tagindex = handler.IndexInterface;
 
@@ -251,8 +252,12 @@ namespace BlamLib.Test
 			new ModelTestDefinition("WEAPON", @"weapons\sniper rifle\sniper rifle",
 			    Blam.Halo1.TagGroups.weap),
 		};
-		static readonly ModelTestDefinition[] BSPTestDefinitions = new ModelTestDefinition[]
+        static readonly ModelTestDefinition[] BSPTestDefinitions = new ModelTestDefinition[]
 		{
+			new ModelTestDefinition("BSP", @"levels\test\beavercreek\beavercreek",
+			    Blam.Halo1.TagGroups.sbsp),
+			new ModelTestDefinition("BSP", @"levels\test\longest\longest",
+			    Blam.Halo1.TagGroups.sbsp),
 			new ModelTestDefinition("BSP", @"levels\test\ratrace\ratrace",
 			    Blam.Halo1.TagGroups.sbsp),
 			new ModelTestDefinition("BSP", @"levels\test\deathisland\deathisland",
@@ -262,11 +267,45 @@ namespace BlamLib.Test
 			new ModelTestDefinition("BSP", @"levels\b40\b40_b4",
 				Blam.Halo1.TagGroups.sbsp),
 		};
+        static readonly ModelTestDefinition[] ScenarioTestDefinitions = new ModelTestDefinition[]
+		{
+			new ModelTestDefinition("SCENARIO", @"levels\test\beavercreek\beavercreek",
+			    Blam.Halo1.TagGroups.scnr),
+			new ModelTestDefinition("SCENARIO", @"levels\test\longest\longest",
+			    Blam.Halo1.TagGroups.scnr),
+			new ModelTestDefinition("SCENARIO", @"levels\test\ratrace\ratrace",
+			    Blam.Halo1.TagGroups.scnr),
+			new ModelTestDefinition("SCENARIO", @"levels\test\deathisland\deathisland",
+			    Blam.Halo1.TagGroups.scnr),
+			new ModelTestDefinition("SCENARIO", @"levels\a50\a50",
+				Blam.Halo1.TagGroups.scnr),
+			new ModelTestDefinition("SCENARIO", @"levels\b40\b40",
+				Blam.Halo1.TagGroups.scnr),
+		};
+
+		public class TestColladaSettings : BlamLib.Render.COLLADA.IColladaSettings
+		{
+			public bool Overwrite { get; private set; }
+			public string RootDirectory { get; private set; }
+			public string BitmapExtension { get; private set; }
+
+			public TestColladaSettings(bool overwrite, string root, string extension)
+			{
+				Overwrite = overwrite;
+				RootDirectory = root;
+				BitmapExtension = extension;
+			}
+		}
 
 		[TestMethod]
 		public void Halo1TestCOLLADAModelExport()
 		{
-			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
+			var settings = new TestColladaSettings(
+				true,
+				Path.Combine(kTestInstallationRootPath, kTestDataDir),
+				".bmp");
+
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
 			{
 				var tagindex = handler.IndexInterface;
 				foreach (var model_def in ModelTestDefinitions)
@@ -278,94 +317,145 @@ namespace BlamLib.Test
 						Console.WriteLine("{0} LOAD: Time taken: {1}", model_def.TypeString, m_testStopwatch.Elapsed);
 					}
 					Console.WriteLine("TAG INDEX: Time taken: {0}", StopStopwatch());
-
+					
 					// create a halo1 collada interface with the gbxmodel datum
 					var object_tag = tagindex[model_def.TagIndex].TagDefinition as Blam.Halo1.Tags.object_group;
+					var tagManager = tagindex[object_tag.Model.Datum];
+					string name = Path.GetFileNameWithoutExtension(model_def.Name);
 
-					var halo1 = new BlamLib.Render.COLLADA.Halo1.ColladaHalo1(tagindex, object_tag.Model.Datum);
+					var modelData = new BlamLib.Render.COLLADA.Halo1.ModelData();
+					var modelShaderData = new BlamLib.Render.COLLADA.Halo1.ModelShaderData();
+					
+					modelData.CollectData(tagindex, tagManager);
+					modelShaderData.CollectData(tagindex, tagManager);
 
-					// set the interfaces settings (want to look into a better way of doing this)
-					halo1.Overwrite = true;
-					halo1.RelativeFilePath = Path.Combine(kTestTagIndexTagsPath, @"data\");
+					var exporter = new BlamLib.Render.COLLADA.Halo1.ColladaModelExporter(settings,
+						tagindex,
+						tagManager);
 
-					// export each permutation and lod separately
-					foreach (var info in halo1)
-					{
-						// clear the export register
-						halo1.ClearRegister();
-						// add the info object to export
-						halo1.RegisterForExport(info);
-						
-						var model_info = info as Render.COLLADA.Halo1.ColladaHalo1ModelInfo;
+					exporter.ErrorOccured +=
+						(object sender, BlamLib.Render.COLLADA.ColladaErrorEventArgs args) =>
+						{
+							Console.WriteLine("COLLADA_ERROR: {0}", args.ErrorMessage);
+						};
 
-						string name = string.Format("{0}-perm{1}-lod{2}", model_info.Name, model_info.Permutation, model_info.LevelOfDetail);
-
-						StartStopwatch();
-						halo1.Export(name);
-						Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", name, StopStopwatch());
-
-						// print any errors
-						foreach (string report in halo1.Reports())
-							Console.WriteLine(report);
-					}
-
-					// export all the models into a single collada file
-					halo1.ClearRegister();
-					foreach (var info in halo1)
-						halo1.RegisterForExport(info);
-
-					string name_all = Path.GetFileNameWithoutExtension(model_def.Name) + "_all";
+					exporter.AddDataProvider(modelData);
+					exporter.AddDataProvider(modelShaderData);
 
 					StartStopwatch();
-					halo1.Export(name_all);
-					Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", name_all, StopStopwatch());
 
-					foreach (string report in halo1.Reports())
-						Console.WriteLine(report);
+					Assert.IsTrue(exporter.BuildColladaInstance(), "Failed to build collada instance for {0}", model_def.Name);
+					exporter.SaveDAE(Path.Combine(kTestResultsDataPath, modelData.GetRelativeURL()) + ".dae");
+
+					Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", name, StopStopwatch());
 
 					model_def.Close(tagindex);
 				}
 			}
 		}
 
-		[TestMethod]
-		public void Halo1TestCOLLADABSPExport()
-		{
-			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestTagIndexTagsPath))
-			{
-				var tagindex = handler.IndexInterface;
-				foreach (var model_def in BSPTestDefinitions)
-				{
-					StartStopwatch();
-					{
-						model_def.Open(tagindex);
-						Console.WriteLine(model_def.TypeString + " LOAD: Time taken: {0}", m_testStopwatch.Elapsed);
-					}
-					Console.WriteLine("TAG INDEX: Time taken: {0}", StopStopwatch());
+        [TestMethod]
+        public void Halo1TestCOLLADABSPExport()
+        {
+            var settings = new TestColladaSettings(
+                true,
+				Path.Combine(kTestInstallationRootPath, kTestDataDir),
+                ".bmp");
 
-					var halo1 = new BlamLib.Render.COLLADA.Halo1.ColladaHalo1(tagindex, model_def.TagIndex);
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestTagsDir))
+            {
+                var tagindex = handler.IndexInterface;
+                foreach (var model_def in BSPTestDefinitions)
+                {
+                    StartStopwatch();
+                    {
+                        model_def.Open(tagindex);
+                        Console.WriteLine(model_def.TypeString + " LOAD: Time taken: {0}", m_testStopwatch.Elapsed);
+                    }
+                    Console.WriteLine("TAG INDEX: Time taken: {0}", StopStopwatch());
 
-					halo1.Overwrite = true;
-					halo1.RelativeFilePath = Path.Combine(kTestTagIndexTagsPath, @"data\");
+                    var tagManager = tagindex[model_def.TagIndex];
 
-					halo1.ClearRegister();
+					var bspData = new BlamLib.Render.COLLADA.Halo1.StructureBSPData();
+					var bspShaderData = new BlamLib.Render.COLLADA.Halo1.StructureBSPShaderData();
 
-					foreach (var info in halo1)
-						halo1.RegisterForExport(info);
+                    bspData.CollectData(tagindex, tagManager);
+                    bspShaderData.CollectData(tagindex, tagManager);
 
-					var bsp_info = halo1[0] as Render.COLLADA.Halo1.ColladaHalo1BSPInfo;
+                    var exporter = new BlamLib.Render.COLLADA.Halo1.ColladaBSPExporter(settings,
+                        tagindex,
+                        tagManager);
 
-					StartStopwatch();
-					halo1.Export(bsp_info.Name);
-					Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", bsp_info.Name, StopStopwatch());
+                    exporter.ErrorOccured +=
+                        (object sender, BlamLib.Render.COLLADA.ColladaErrorEventArgs args) =>
+                        {
+                            Console.WriteLine("COLLADA_ERROR: {0}", args.ErrorMessage);
+                        };
 
-					foreach (string report in halo1.Reports())
-						Console.WriteLine(report);
+                    exporter.AddDataProvider(bspData);
+                    exporter.AddDataProvider(bspShaderData);
 
-					model_def.Close(tagindex);
-				}
-			}
-		}
+                    StartStopwatch();
+
+                    Assert.IsTrue(exporter.BuildColladaInstance(), "Failed to build collada instance for {0}", model_def.Name);
+                    exporter.SaveDAE(Path.Combine(kTestResultsDataPath, tagManager.Name) + ".dae");
+
+                    Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", model_def.Name, StopStopwatch());
+
+                    model_def.Close(tagindex);
+                }
+            }
+        }
+
+        [TestMethod]
+        public void Halo1TestCOLLADAScenarioExport()
+        {
+            var settings = new TestColladaSettings(
+                true,
+				Path.Combine(kTestInstallationRootPath, kTestDataDir),
+                ".bmp");
+
+			using (var handler = new TagIndexHandler<Managers.TagIndex>(BlamVersion.Halo1_CE, kTestInstallationRootPath, kTestDataDir))
+            {
+                var tagindex = handler.IndexInterface;
+                foreach (var scenario_def in ScenarioTestDefinitions)
+                {
+                    StartStopwatch();
+                    {
+                        scenario_def.Open(tagindex);
+                        Console.WriteLine(scenario_def.TypeString + " LOAD: Time taken: {0}", m_testStopwatch.Elapsed);
+                    }
+                    Console.WriteLine("TAG INDEX: Time taken: {0}", StopStopwatch());
+
+                    var tagManager = tagindex[scenario_def.TagIndex];
+
+					var scenarioData = new BlamLib.Render.COLLADA.Halo1.ScenarioData();
+
+                    scenarioData.CollectData(tagindex, tagManager);
+
+                    var exporter = new BlamLib.Render.COLLADA.Halo1.ColladaScenarioExporter(settings,
+                        tagindex,
+                        tagManager);
+
+                    exporter.ErrorOccured +=
+                        (object sender, BlamLib.Render.COLLADA.ColladaErrorEventArgs args) =>
+                        {
+                            Console.WriteLine("COLLADA_ERROR: {0}", args.ErrorMessage);
+                        };
+
+                    exporter.AddDataProvider(scenarioData);
+
+                    StartStopwatch();
+
+                    Assert.IsTrue(exporter.BuildColladaInstance(), "Failed to build collada instance for {0}", scenario_def.Name);
+                    exporter.SaveDAE(Path.Combine(kTestResultsDataPath, tagManager.Name) + "-objects.dae");
+
+                    Console.WriteLine("EXPORT {0} TIME: Time taken: {1}", scenario_def.Name, StopStopwatch());
+
+                    scenario_def.Close(tagindex);
+                }
+            }
+        }
 
 		[TestMethod]
 		public void Halo1TestCOLLADAModelImport()
@@ -377,8 +467,9 @@ namespace BlamLib.Test
 
 			foreach (var model_def in ModelTestDefinitions)
 			{
-				string file_path = Path.Combine(kTestTagIndexTagsPath, @"data\");
-				file_path = Path.Combine(file_path, Path.GetFileNameWithoutExtension(model_def.Name) + "_all.dae");
+				var file_path = Path.Combine(Path.Combine(kTestInstallationRootPath, kTestDataDir));
+				file_path = Path.Combine(file_path, model_def.Name);
+				file_path = Path.ChangeExtension(file_path, "dae");
 				
 				using (var reader = new System.Xml.XmlTextReader(file_path))
 				{
