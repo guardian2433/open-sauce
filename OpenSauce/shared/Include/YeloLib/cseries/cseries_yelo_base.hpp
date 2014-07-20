@@ -53,6 +53,12 @@ namespace Yelo
 	// System Dispose from old map function pointer
 	// Note: We can use this in engine definitions as well since it takes no parameters
 	typedef void (API_FUNC* proc_dispose_from_old_map)();
+	// System Initialize for bsp load function pointer
+	// Note: We can use this in engine definitions as well since it takes no parameters
+	typedef void (API_FUNC* proc_initialize_for_new_bsp)();
+	// System Dispose for bsp unload function pointer
+	// Note: We can use this in engine definitions as well since it takes no parameters
+	typedef void (API_FUNC* proc_dispose_from_old_bsp)();
 	// System Update function pointer
 	typedef void (API_FUNC* proc_update)(float);
 	// System Update function pointer
@@ -279,7 +285,7 @@ namespace Yelo
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	If the COM interface reference isn't NULL, releases it and NULL it. </summary>
 	///
-	/// <typeparam name="typename TInterface">	COM interface type. </typeparam>
+	/// <tparam name="TInterface">	COM interface type. </tparam>
 	/// <param name="obj">	[in,out] If non-null, the COM object. </param>
 	template<typename TInterface> inline
 	void safe_release(TInterface*& obj) // TODO: refactor to SafeRelease
@@ -290,6 +296,77 @@ namespace Yelo
 			obj = nullptr;
 		}
 	}
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////
+	/// <summary>	Class for automatically releasing a COM object when it does out of scope. </summary>
+	///
+	/// <tparam name="TInterface">	COM interface type. </tparam>
+	template<typename TInterface>
+	class c_auto_release
+	{
+		TInterface* m_target_object;
+
+	public:
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Constructor. </summary>
+		///
+		/// <param name="target_object">	[in] If non-null, the target object. </param>
+		c_auto_release(TInterface* target_object)
+			: m_target_object(target_object)
+		{ }
+
+		/// <summary>	Default constructor. </summary>
+		c_auto_release()
+			: m_target_object(nullptr)
+		{ }
+
+		/// <summary>	Destructor. </summary>
+		~c_auto_release()
+		{
+			if(m_target_object)
+			{
+				m_target_object->Release();
+			}
+			m_target_object = nullptr;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Assignment operator. Sets the raw value to the provided value. </summary>
+		///
+		/// <param name="value">	The value to set. </param>
+		///
+		/// <returns>	The current value. </returns>
+		TInterface*& operator=(const TInterface*& value)
+		{
+			m_target_object = value;
+
+			return m_target_object;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Member reference operator. </summary>
+		///
+		/// <returns>	The referenced member. </returns>
+		TInterface** operator&()
+		{
+			return &m_target_object;
+		}
+
+		////////////////////////////////////////////////////////////////////////////////////////////////////
+		/// <summary>	Member dereference operator. </summary>
+		///
+		/// <returns>	The dereferenced object. </returns>
+		TInterface*& operator->()
+		{
+			return m_target_object;
+		}
+
+		/// <summary>	Support for casting the object to the templated type. </summary>
+		operator TInterface*&()
+		{
+			return m_target_object;
+		}
+	};
 
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	/// <summary>	If the object pointer reference isn't NULL, deletes it and NULL it. </summary>
