@@ -33,16 +33,6 @@ namespace Yelo
 			CAST_PTR(boost::uuids::uuid&, uuid_buffer) = uuid_generator();
 		}
 
-		bool s_scenario_faux_zone_sky::IsValid() const
-		{
-			return scenario_sky_to_replace != NONE && !sky.tag_index.IsNull();
-		}
-
-		bool s_scenario_faux_zone_set_variant::HasGameStateChanges() const
-		{
-			return lightmap_index != NONE || sky_index != NONE;
-		}
-
 		//////////////////////////////////////////////////////////////////////////
 		// project_yellow
 		cstring project_yellow::k_default_name = "i've got a lovely bunch of corncobs";
@@ -122,6 +112,12 @@ namespace Yelo
 			{
 				tag_data_delete(&hs_syntax_data); // If hs_syntax_data.size != GetTotalScenarioHsSyntaxData, the engine will recompile the scripts
 				YELO_WARN("CheApe: '%s' was cleansed but its scripts will need to be recompiled in the stock Sapien before a map can be built");
+			}
+
+			// Delete the bsp modifiers
+			while(scnr->bsp_modifiers.Count)
+			{
+				blam::tag_block_delete_element(scnr->bsp_modifiers, 0);
 			}
 		}
 #endif

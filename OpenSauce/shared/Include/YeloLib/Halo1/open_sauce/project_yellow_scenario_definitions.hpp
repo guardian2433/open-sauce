@@ -73,57 +73,6 @@ namespace Yelo
 		};
 
 		//////////////////////////////////////////////////////////////////////////
-		// scenario information
-		struct s_scenario_faux_zone_sky
-		{
-			TAG_FIELD(tag_string, name, "", "code name for this sky");
-			PAD16;
-			// Index of the scenario sky this will replace
-			TAG_FIELD(int16, scenario_sky_to_replace); // block into to the 'skies' block
-			TAG_FIELD(tag_reference, sky, 'sky ');
-
-			bool IsValid() const;
-		};
-
-		struct s_scenario_faux_zone_lightmap_set
-		{
-			TAG_FIELD(tag_reference, definition, 'bitm');
-			TAG_PAD(tag_reference, 3); // 48
-		};
-		struct s_scenario_faux_zone_set_variant
-		{
-			TAG_FIELD(tag_string, name, "", "code name for this set variant");
-			struct _flags {
-				TAG_FLAG16(unused);
-			}flags;	BOOST_STATIC_ASSERT( sizeof(_flags) == sizeof(word_flags) );
-
-			TAG_FIELD(int16, lightmap_index,	s_scenario_faux_zone_lightmap_set);
-			TAG_FIELD(int16, sky_index,			s_scenario_faux_zone_sky);
-
-			PAD16;
-			PAD32;
-
-			// Does this variant have an actual changes to the game/tag state?
-			bool HasGameStateChanges() const;
-		};
-		struct s_scenario_faux_zone_set
-		{
-			TAG_FIELD(tag_string, name, "", "code name for this zone set");
-			TAG_FIELD(tag_reference, structure_bsp, 'sbsp');
-			TAG_TBLOCK(lightmaps, s_scenario_faux_zone_lightmap_set); // 128
-			TAG_TBLOCK(variants, s_scenario_faux_zone_set_variant); // 128
-			TAG_PAD(tag_block, 2); // 24
-		};
-		struct s_project_yellow_scenario_information
-		{
-			// Skies that the scenario uses. Doesn't have to match the ordering of the scenario's block
-			TAG_TBLOCK(skies, tag_reference); // 'sky ', k_maximum_skies_per_scenario
-			TAG_PAD(tag_block, 1); // 12
-			TAG_TBLOCK(zone_skies, s_scenario_faux_zone_sky); // 64
-			TAG_TBLOCK(zones, s_scenario_faux_zone_set); // 64
-			TAG_PAD(tag_block, 3); // 36
-		};
-		//////////////////////////////////////////////////////////////////////////
 
 		// yelo for scenarios
 		struct project_yellow
@@ -202,12 +151,8 @@ namespace Yelo
 			TAG_TBLOCK(user_scripting, s_scripting_definitions); // 1
 			/* !-- Scripting --! */
 
-			/* !-- Scenario Enhancements --! */
-			TAG_TBLOCK(scenario, s_project_yellow_scenario_information); // 1
-			/* !-- Scenario Enhancements --! */
 
-
-			TAG_PAD(int32, 20); // 80
+			TAG_PAD(int32, 23); // 92
 
 
 

@@ -11,6 +11,7 @@
 
 #include "Tool/BuildCacheFile/TagPreprocess_PostProcessing.inl"
 #include "Tool/BuildCacheFile/TagPreprocess_ShaderExtension.inl"
+#include "Tool/BuildCacheFile/TagPreprocess_Scenario.inl"
 
 namespace Yelo { namespace Tool {
 
@@ -44,6 +45,9 @@ namespace BuildCacheFileEx
 					break;
 				case TagGroups::s_shader_environment_definition::k_group_tag:
 					ShaderExtension::shader_environment_extension_process(tag_index);
+					break;
+				case TagGroups::scenario::k_group_tag:
+					Scenario::scenario_preprocess(tag_index);
 					break;
 				}
 			}

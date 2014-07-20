@@ -41,4 +41,12 @@
 			7, "<tag-name> <group> <prompt-to-continue> <prompt-to-fix-unresolved> <load-non-resolving-refs> <print-size> <verbose>", 
 		&tag_load_maintenance),
 
+	IMPORT_CLASS_DEFINITION("compile-shaders", 
+			5, "<source-directory> <intermediate-directory> <output-directory> <collection-definition> <specific-shader>", 
+		&Shader::Compiler::compile_shaders),
+
+	IMPORT_CLASS_DEFINITION("build-packed-file", 
+			3, "<source-directory> <output-directory> <file-definition-xml>", 
+		&PackedFile::build_packed_file),
+
 	// TODO: add new import classes here
