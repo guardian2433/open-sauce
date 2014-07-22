@@ -1,0 +1,560 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <OSRootDir>$(ProjectDir)..\..\..\</OSRootDir>
+    <OSRequiresDirectX>true</OSRequiresDirectX>
+    <OSRequiresCppBoost>true</OSRequiresCppBoost>
+    <OSRequiresVLD>true</OSRequiresVLD>
+    <OSRequiresHaloCustomEd>true</OSRequiresHaloCustomEd>
+    <OSRequiresGameSpyOpen>true</OSRequiresGameSpyOpen>
+  </PropertyGroup>
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDedi|Win32">
+      <Configuration>DebugDedi</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDedi|Win32">
+      <Configuration>ReleaseDedi</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{2647697B-680F-4155-B6A2-041C184A479D}</ProjectGuid>
+    <RootNamespace>Halo1_CE</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v120_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration.Contains(Release))' " Label="Configuration">
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <Import Project="$(OSRootDir)shared\config\msbuild\OpenSauce.props" />
+  <Import Project="$(OSRootDir)OpenSauce\shared\config\msbuild\YeloLib.props" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>11.0.60315.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>GSI_NO_THREADS;HALO1_CE_EXPORTS;_WINDOWS;_USRDLL;_CRT_SECURE_NO_DEPRECATE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;dbghelp.lib;Halo1_YeloLib.lib;Halo1_BlamLib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>LIBC;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>Halo1_CE.def</ModuleDefinitionFile>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(Configuration.Contains(Debug))' ">
+    <ClCompile>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <BufferSecurityCheck>false</BufferSecurityCheck>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition=" '$(OSPlatformType)'=='Client' ">
+    <ClCompile>
+      <PreprocessorDefinitions>DX_WRAPPER;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <PropertyGroup Condition=" '$(OSPlatformType)'=='Client' ">
+    <TargetName>dinput8</TargetName>
+    <OSDebugExecutableName>haloce.exe</OSDebugExecutableName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(OSPlatformType)'=='Dedi' ">
+    <TargetName>OpenSauceDedi</TargetName>
+    <OSDebugExecutableName>OS_haloceded.exe</OSDebugExecutableName>
+  </PropertyGroup>
+  <Import Project="$(OSRootDir)shared\config\msbuild\OpenSauceDebuggerDefaults.props" />
+  <ItemGroup>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\darray.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\darray.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\hashtable.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\hashtable.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\md5.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\md5c.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\nonport.h" />
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsAssert.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsAssert.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsAvailable.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsAvailable.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsCommon.h" />
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsCore.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsCore.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsCrypt.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsCrypt.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsDebug.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsDebug.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsLargeInt.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsLargeInt.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsMemory.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsMemory.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsPlatform.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsPlatform.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformSocket.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformSocket.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformThread.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformThread.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformUtil.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsPlatformUtil.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsRC4.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsRC4.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsResultCodes.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsResultCodes.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsSHA1.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsSHA1.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsSoap.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsSoap.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsSSL.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsSSL.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsStringUtil.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsStringUtil.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\common\gsXML.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\common\gsXML.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttp.h" />
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpASCII.h" />
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpBuffer.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpBuffer.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpCallbacks.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpCallbacks.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpCommon.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpCommon.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpConnection.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpConnection.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpEncryption.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpEncryption.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpMain.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpMain.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpPost.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpPost.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpProcess.h" />
+    <ClCompile Include="..\..\shared\Include\GameSpyOpen\ghttp\ghttpProcess.c">
+      <PrecompiledHeader />
+    </ClCompile>
+    <ClInclude Include="..\..\shared\Include\mongoose\mongoose.h" />
+    <ClCompile Include="..\..\shared\Include\mongoose\mongoose.c">
+      <PrecompiledHeader />
+      <DisableSpecificWarnings>4090;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <ClCompile Include="Common\DebugDump.cpp" />
+    <ClCompile Include="Common\FileIO.cpp" />
+    <ClCompile Include="Common\GameSystems.cpp" />
+    <ClCompile Include="Game\AI.cpp" />
+    <ClCompile Include="Game\Camera.cpp" />
+    <ClCompile Include="Game\Campaign.cpp" />
+    <ClCompile Include="Game\Console.cpp" />
+    <ClCompile Include="Game\Effects.cpp" />
+    <ClCompile Include="Game\EngineFunctions.cpp" />
+    <ClCompile Include="Game\GameBuildNumber.cpp" />
+    <ClCompile Include="Game\GameEngine.cpp" />
+    <ClCompile Include="Game\GameState.cpp" />
+    <ClCompile Include="Game\GameStateRuntimeData.cpp" />
+    <ClCompile Include="Game\Lights.cpp" />
+    <ClCompile Include="Game\Players.cpp" />
+    <ClCompile Include="Game\Scripting.cpp" />
+    <ClCompile Include="Game\ScriptLibrary.cpp" />
+    <ClCompile Include="Interface\Controls.cpp" />
+    <ClCompile Include="Interface\GameUI.cpp" />
+    <ClCompile Include="Interface\Keystone.cpp" />
+    <ClCompile Include="Interface\TextBlock.cpp" />
+    <ClCompile Include="Interface\UIWidgets.cpp" />
+    <ClCompile Include="Memory\FunctionInterface.cpp" />
+    <ClCompile Include="Memory\MemoryInterface.cpp" />
+    <ClCompile Include="Networking\GameSpyApi.cpp" />
+    <ClCompile Include="Networking\Networking.cpp" />
+    <ClCompile Include="Networking\Server.cpp" />
+    <ClCompile Include="Networking\VersionCheck.cpp" />
+    <ClCompile Include="Networking\VersionCheckClient.cpp" />
+    <ClCompile Include="Networking\VersionCheckDedi.cpp" />
+    <ClCompile Include="Networking\HTTP\BanManager.cpp" />
+    <ClCompile Include="Networking\HTTP\c_file_downloader.cpp" />
+    <ClCompile Include="Networking\HTTP\c_xml_downloader.cpp" />
+    <ClCompile Include="Networking\HTTP\HTTP.cpp" />
+    <ClCompile Include="Networking\HTTP\HTTPClient.cpp" />
+    <ClCompile Include="Networking\HTTP\HTTPServer.cpp" />
+    <ClCompile Include="Networking\HTTP\MapDownloadClient.cpp" />
+    <ClCompile Include="Networking\HTTP\MapDownloadClientDisplay.cpp" />
+    <ClCompile Include="Networking\HTTP\MapDownloadServer.cpp" />
+    <ClCompile Include="Networking\MessageDefinitions.cpp" />
+    <ClCompile Include="Networking\MessageDeltas.cpp" />
+    <ClCompile Include="Objects\Equipment.cpp" />
+    <ClCompile Include="Objects\ObjectFieldDefinitions.cpp" />
+    <ClCompile Include="Objects\ObjectsYelo.cpp" />
+    <ClCompile Include="Objects\Units.cpp" />
+    <ClCompile Include="Rasterizer\Lightmaps.cpp" />
+    <ClCompile Include="Rasterizer\Sky.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Bloom\c_settings_bloom.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\FXAA\c_settings_fxaa.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\External\c_settings_external.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\Internal\c_settings_internal.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\MotionBlur\c_settings_motionblur.cpp" />
+    <ClCompile Include="Settings\Settings.cpp" />
+    <ClCompile Include="TagGroups\CacheFiles.cpp" />
+    <ClCompile Include="TagGroups\TagGroups.cpp" />
+    <ClCompile Include="Rasterizer\GBuffer.cpp" />
+    <ClCompile Include="Rasterizer\Rasterizer.cpp" />
+    <ClCompile Include="Rasterizer\RenderTargetChain.cpp" />
+    <ClCompile Include="Rasterizer\ShaderDraw.cpp" />
+    <ClCompile Include="Rasterizer\DX9\DeviceHooks.cpp" />
+    <ClCompile Include="Rasterizer\DX9\DX9.cpp" />
+    <ClCompile Include="Rasterizer\DX9\DxWrapper.cpp" />
+    <ClCompile Include="Rasterizer\DX9\rasterizer_dx9_shaders_vshader9.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_effect_instance.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_effect_postprocess.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_effect_render_set.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_post_processing_main.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_quad_manager.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_shader_include_manager.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_shader_instance.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\c_shader_postprocess.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\PostProcessing.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\PostProcessingErrorReporting.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\PostProcessingScripting.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\MotionBlur\c_shader_instance_motionblur.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\MotionBlur\c_shader_motionblur.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\MotionBlur\c_system_motionblur.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Bloom\c_shader_bloom.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Bloom\c_shader_instance_bloom.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Bloom\c_system_bloom.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_external.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_postprocess_definition.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_pp_shaders.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\c_effect_generic.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\c_effect_instance_generic.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\c_parameter_instance.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\c_shader_generic.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\c_shader_instance_generic.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\Internal\c_effect_internal.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\Internal\c_shader_internal.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\Internal\c_system_internal.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\External\c_effect_external.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\External\c_shader_external.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Generic\External\c_system_external.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Fade\c_shader_fade.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Fade\c_shader_instance_fade.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\Fade\c_system_fade.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\FXAA\c_shader_fxaa.cpp" />
+    <ClCompile Include="Rasterizer\PostProcessing\FXAA\c_system_fxaa.cpp" />
+    <ClCompile Include="Rasterizer\ShaderExtension\ShaderExtension.cpp" />
+    <ClCompile Include="Scenario\Scenario.cpp" />
+    <ClCompile Include="Scenario\StructureBSP.cpp" />
+    <ClCompile Include="MainYelo.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Common\DebugDump.hpp" />
+    <ClInclude Include="Common\FileIO.hpp" />
+    <ClInclude Include="Common\GameSystemDefinitions.hpp" />
+    <ClInclude Include="Common\GameSystems.hpp" />
+    <ClInclude Include="Common\Platform.hpp" />
+    <ClInclude Include="Common\Precompile.hpp" />
+    <ClInclude Include="Game\AI.hpp" />
+    <ClInclude Include="Game\Camera.hpp" />
+    <ClInclude Include="Game\Campaign.hpp" />
+    <ClInclude Include="Game\Console.hpp" />
+    <ClInclude Include="Game\Effects.hpp" />
+    <ClInclude Include="Game\EngineFunctions.hpp" />
+    <ClInclude Include="Game\GameBuildNumber.hpp" />
+    <ClInclude Include="Game\GameEngine.hpp" />
+    <ClInclude Include="Game\GameState.hpp" />
+    <ClInclude Include="Game\GameStateRuntimeData.hpp" />
+    <ClInclude Include="Game\Lights.hpp" />
+    <ClInclude Include="Game\Players.hpp" />
+    <ClInclude Include="Game\Scripting.hpp" />
+    <ClInclude Include="Game\ScriptLibrary.hpp" />
+    <ClInclude Include="Interface\Controls.hpp" />
+    <ClInclude Include="Interface\ControlTypes.hpp" />
+    <ClInclude Include="Interface\GameUI.hpp" />
+    <ClInclude Include="Interface\Keystone.hpp" />
+    <ClInclude Include="Interface\TextBlock.hpp" />
+    <ClInclude Include="Interface\UIWidgets.hpp" />
+    <ClInclude Include="Interface\YeloSettingsInterface.hpp" />
+    <ClInclude Include="Memory\FunctionInterface.hpp" />
+    <ClInclude Include="Memory\MemoryInterface.hpp" />
+    <ClInclude Include="Networking\GameSpyApi.hpp" />
+    <ClInclude Include="Networking\Networking.hpp" />
+    <ClInclude Include="Networking\Server.hpp" />
+    <ClInclude Include="Networking\VersionCheck.hpp" />
+    <ClInclude Include="Networking\VersionCheckClient.hpp" />
+    <ClInclude Include="Networking\VersionCheckDedi.hpp" />
+    <ClInclude Include="Networking\HTTP\BanManager.hpp" />
+    <ClInclude Include="Networking\HTTP\c_file_downloader.hpp" />
+    <ClInclude Include="Networking\HTTP\c_xml_downloader.hpp" />
+    <ClInclude Include="Networking\HTTP\HTTP.hpp" />
+    <ClInclude Include="Networking\HTTP\HTTPClient.hpp" />
+    <ClInclude Include="Networking\HTTP\HTTPServer.hpp" />
+    <ClInclude Include="Networking\HTTP\MapDownloadClient.hpp" />
+    <ClInclude Include="Networking\HTTP\MapDownloadClientDisplay.hpp" />
+    <ClInclude Include="Networking\HTTP\MapDownloadServer.hpp" />
+    <ClInclude Include="Networking\MDP.hpp" />
+    <ClInclude Include="Networking\MessageDefinitions.hpp" />
+    <ClInclude Include="Networking\MessageDeltaDefinitions.hpp" />
+    <ClInclude Include="Networking\MessageDeltas.hpp" />
+    <ClInclude Include="Objects\Equipment.hpp" />
+    <ClInclude Include="Objects\ObjectFieldDefinitions.hpp" />
+    <ClInclude Include="Objects\Objects.hpp" />
+    <ClInclude Include="Objects\Objects.VehicleSettings.hpp" />
+    <ClInclude Include="Objects\Objects.WeaponSettings.hpp" />
+    <ClInclude Include="Objects\Units.hpp" />
+    <ClInclude Include="Rasterizer\Lightmaps.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interpolation\c_interp_function_pp_anim.hpp" />
+    <ClInclude Include="Rasterizer\Sky.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Bloom\c_settings_bloom.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\FXAA\c_settings_fxaa.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\External\c_settings_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\Internal\c_settings_internal.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\MotionBlur\c_settings_motionblur.hpp" />
+    <ClInclude Include="Settings\Settings.hpp" />
+    <ClInclude Include="TagGroups\CacheFiles.hpp" />
+    <ClInclude Include="TagGroups\TagGroups.hpp" />
+    <ClInclude Include="Memory\_EngineLayoutDefinitions.hpp" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="Rasterizer\GBuffer.hpp" />
+    <ClInclude Include="Rasterizer\Rasterizer.hpp" />
+    <ClInclude Include="Rasterizer\RenderTargetChain.hpp" />
+    <ClInclude Include="Rasterizer\ShaderDraw.hpp" />
+    <ClInclude Include="Rasterizer\DX9\DeviceHooks.hpp" />
+    <ClInclude Include="Rasterizer\DX9\DX9.hpp" />
+    <ClInclude Include="Rasterizer\DX9\DxWrapper.hpp" />
+    <ClInclude Include="Rasterizer\DX9\rasterizer_dx9_shaders_vshader9.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_effect_instance.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_effect_postprocess.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_effect_render_set.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_post_processing_main.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_quad_manager.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_shader_include_manager.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_shader_instance.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\c_shader_postprocess.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\PostProcessing.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\PostProcessingErrorReporting.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\PostProcessingScripting.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interfaces\IPostProcessingCacheComponent.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interfaces\IPostProcessingComponent.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interfaces\IPostProcessingRenderable.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interfaces\IPostProcessingUpdatable.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Interfaces\IPostProcessingUserSettings.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\MotionBlur\c_shader_instance_motionblur.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\MotionBlur\c_shader_motionblur.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\MotionBlur\c_system_motionblur.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\MotionBlur\s_shader_motionblur_definition.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Bloom\c_shader_bloom.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Bloom\c_shader_instance_bloom.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Bloom\c_system_bloom.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Bloom\s_shader_bloom_definition.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_base.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_postprocess_definition.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\ShaderSources\c_shader_data_pp_shaders.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\c_effect_generic.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\c_effect_instance_generic.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\c_parameter_instance.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\c_shader_generic.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\c_shader_instance_generic.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\Internal\c_effect_internal.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\Internal\c_shader_internal.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\Internal\c_system_internal.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\External\c_effect_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\External\c_shader_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\External\c_system_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Generic\External\s_effect_postprocess_external.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Fade\c_shader_fade.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Fade\c_shader_instance_fade.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Fade\c_system_fade.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\Fade\s_shader_fade_definition.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\FXAA\c_shader_fxaa.hpp" />
+    <ClInclude Include="Rasterizer\PostProcessing\FXAA\c_system_fxaa.hpp" />
+    <ClInclude Include="Rasterizer\ShaderExtension\ShaderExtension.hpp" />
+    <ClInclude Include="Scenario\Scenario.hpp" />
+    <ClInclude Include="Scenario\StructureBSP.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Halo1_CE_Readme.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Common\GameSystemComponent.Definitions.inl" />
+    <None Include="Common\GameSystemComponent.IterationRoundBegin.inl" />
+    <None Include="Common\GameSystemComponent.IterationRoundEnd.inl" />
+    <None Include="Common\GameSystemComponents.Game.inl" />
+    <None Include="Common\GameSystemComponents.GameState.inl" />
+    <None Include="Common\GameSystemComponents.GameStateYelo.inl" />
+    <None Include="Common\GameSystemComponents.Interface.inl" />
+    <None Include="Common\GameSystemComponents.Misc.inl" />
+    <None Include="Common\GameSystemComponents.Networking.inl" />
+    <None Include="Common\GameSystemComponents.Render.inl" />
+    <None Include="Common\GameSystemComponents.Scripting.inl" />
+    <None Include="Common\GameSystemComponents.Startup.inl" />
+    <None Include="Common\GameSystemComponents.Tags.inl" />
+    <None Include="Game\CameraFov.inl" />
+    <None Include="Game\Campaign.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.HTTPServer.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.HTTPServer.MapDownload.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.Numbers.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.Objects.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.Players.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.Postprocessing.inl" />
+    <None Include="Game\ScriptLibrary.Definitions.RuntimeData.inl" />
+    <None Include="Game\ScriptLibrary.Fixups.inl" />
+    <None Include="Game\ScriptLibrary.inl" />
+    <None Include="Game\ScriptLibrary.Macros.inl" />
+    <None Include="Game\ScriptLibrary.MemoryUpgrades.inl" />
+    <None Include="Game\ScriptLibrary.MiscScriptingFunctions.inl" />
+    <None Include="Game\GameState.EventLog.inl" />
+    <None Include="Game\GameState.MemoryUpgrades.inl" />
+    <None Include="Game\GameState.Procs.inl" />
+    <None Include="Game\GameState.Scripting.inl" />
+    <None Include="Game\GameState.ServerList.inl" />
+    <None Include="Game\GameStateRuntimeData.Scripting.inl" />
+    <None Include="Game\EngineFunctions._Misc.inl" />
+    <None Include="Game\EngineFunctions.Networking.inl" />
+    <None Include="Game\EngineFunctions.Objects.inl" />
+    <None Include="Game\EngineFunctions.Players.inl" />
+    <None Include="Game\Players.ActionResults.inl" />
+    <None Include="Game\Players.NearbyObjects.inl" />
+    <None Include="Game\Players.NetworkPlayerUnit.inl" />
+    <None Include="Game\Players.Scripting.inl" />
+    <None Include="Interface\GameUI_Hud.inl" />
+    <None Include="Interface\GameUI_Menu.inl" />
+    <None Include="Memory\1.10\_EngineLayout.Game.EngineFunctions.inl" />
+    <None Include="Memory\1.10\_EngineLayout.Game.inl" />
+    <None Include="Memory\1.10\_EngineLayout.Interface.inl" />
+    <None Include="Memory\1.10\_EngineLayout.OpenSauce.inl" />
+    <None Include="Memory\1.10\_EngineLayout.Rasterizer.ShaderDraw.inl" />
+    <None Include="Memory\1.10\_EngineLayout.Scenario.inl" />
+    <None Include="Memory\FunctionInterface.Client.inl" />
+    <None Include="Objects\ObjectFieldDefinitions.ImplObjects.inl" />
+    <None Include="Objects\ObjectFieldDefinitions.ImplUnits.inl" />
+    <None Include="Objects\ObjectFieldDefinitions.ImplWeapon.inl" />
+    <None Include="Objects\ObjectFieldDefinitions.inl" />
+    <None Include="Objects\Objects.Damage.inl" />
+    <None Include="Objects\Objects.Scripting.inl" />
+    <None Include="Objects\Units.UnitInfections.inl" />
+    <None Include="Objects\Objects.VehicleSettings.inl" />
+    <None Include="Objects\Objects.WeaponSettings.inl" />
+    <None Include="Objects\Units.Animations.inl" />
+    <None Include="Objects\Units.Boarding.inl" />
+    <None Include="Objects\Units.GrenadeCounts.inl" />
+    <None Include="TagGroups\CacheFiles.CRC.inl" />
+    <None Include="TagGroups\CacheFiles.DataFiles.inl" />
+    <None Include="TagGroups\CacheFiles.MapList.inl" />
+    <None Include="TagGroups\CacheFiles.Settings.inl" />
+    <None Include="TagGroups\CacheFiles.YeloFiles.inl" />
+    <None Include="Memory\_EngineLayout.inl" />
+    <None Include="Halo1_CE.def" />
+    <None Include="Memory\1.08\_EngineLayout.Game.EngineFunctions.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Game.HS.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Game.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Interface.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Networking.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Objects.inl" />
+    <None Include="Memory\1.08\_EngineLayout.OpenSauce.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Rasterizer.DX9.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Rasterizer.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Rasterizer.ShaderDraw.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Rasterizer.ShaderExtension.inl" />
+    <None Include="Memory\1.08\_EngineLayout.Scenario.inl" />
+    <None Include="Memory\1.08\_EngineLayout.TagGroups.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Game.EngineFunctions.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Game.HS.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Game.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Interface.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Networking.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Objects.inl" />
+    <None Include="Memory\1.09\_EngineLayout.OpenSauce.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Rasterizer.DX9.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Rasterizer.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Rasterizer.ShaderDraw.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Rasterizer.ShaderExtension.inl" />
+    <None Include="Memory\1.09\_EngineLayout.Scenario.inl" />
+    <None Include="Memory\1.09\_EngineLayout.TagGroups.inl" />
+    <None Include="Rasterizer\PostProcessing\MotionBlur\MotionBlurDefinitions.inl" />
+    <None Include="Rasterizer\PostProcessing\Bloom\BloomDefinitions.inl" />
+    <None Include="Rasterizer\PostProcessing\Generic\PostProcessingGeneric_EvaluateRuntimeValue.inl" />
+    <None Include="Rasterizer\PostProcessing\Fade\FadeDefinitions.inl" />
+    <None Include="Rasterizer\PostProcessing\PostProcessing_ExternalSubsystemPaths.inl" />
+    <None Include="Rasterizer\PostProcessing\PostProcessing_RenderStates.inl" />
+    <None Include="Rasterizer\PostProcessing\PostProcessing_Systems.inl" />
+    <None Include="Rasterizer\PostProcessing\FXAA\FXAADefinitions.inl" />
+    <None Include="Rasterizer\ShaderExtension\ShaderExtension_Environment.inl" />
+    <None Include="Rasterizer\ShaderExtension\ShaderExtension_Model.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="Halo1_CE_Version.xml" />
+    <Xml Include="YeloFileChecksums.xml" />
+    <Xml Include="YeloSettingsTemplate.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Halo1_CE.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <Import Project="$(OSRootDir)shared\config\msbuild\OpenSauceBuild.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
